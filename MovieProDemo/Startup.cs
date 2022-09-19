@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MovieProDemo.Services;
 
 namespace MovieProDemo
 {
@@ -25,6 +26,9 @@ namespace MovieProDemo
         Configuration = configuration;
     }
     public void ConfigureServices(IServiceCollection services) {
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(ConnectionService.GetConnectionString(Configuration)));
+
         services.AddRazorPages();
 
 
