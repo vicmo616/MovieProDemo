@@ -50,7 +50,7 @@ namespace MovieProDemo
             services.AddTransient<SeedService>();
             services.AddHttpClient();
             services.AddScoped<IRemoteMovieService, TMDBMovieService>();
-            //services.AddSingleton<IImageService, BasicImageService>();
+            services.AddSingleton<IImageService, BasicImageService>();
             services.AddScoped<IDataMappingService, TMDBMappingService>();
         }
 
