@@ -37,7 +37,7 @@ namespace MovieProDemo.Controllers
                 Upcoming = await _tmdbMovieService.SearchMovieDetailAsync(MovieCategory.upcoming, count)
 
             };
-            return View(data);
+            return View(data); 
            
         }
 
