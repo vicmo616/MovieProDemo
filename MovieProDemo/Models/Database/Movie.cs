@@ -11,7 +11,7 @@ namespace MovieProDemo.Models.Database
     public class Movie
     {
         public int Id { get; set; }
-        public int MovieID { get; set; }
+        public int MovieId { get; set; }
 
         public string Title { get; set; }
         public string TagLine { get; set; }
