@@ -57,7 +57,7 @@ namespace MovieProDemo.Services
             {
                 newMovie = new Movie()
                 {
-                    MovieID = movie.id,
+                    MovieId = movie.id,
                     Title = movie.title,
                     TagLine = movie.tagline,
                     Overview = movie.overview,
