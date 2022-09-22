@@ -20,7 +20,7 @@ namespace MovieProDemo.Controllers
         private readonly AppSettings _appSettings;
         private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
-        private readonly IRemoteMovieService _tmdbMovieService;
+        private readonly IRemoteMovieService _movieService;
         private readonly IDataMappingService _tmdbMappingService;
 
         public MoviesController(IOptions<AppSettings> appSettings, ApplicationDbContext context, IImageService imageService, IRemoteMovieService remoteMovieService, IDataMappingService tmdbMappingService, IRemoteMovieService tmdbMovieService)
@@ -29,7 +29,7 @@ namespace MovieProDemo.Controllers
             _context = context;
             _imageService = imageService;
             _tmdbMappingService = tmdbMappingService;
-            _tmdbMovieService = tmdbMovieService;
+            _movieService = tmdbMovieService;
         }
 
         public async Task<IActionResult> Import()
@@ -49,7 +49,7 @@ namespace MovieProDemo.Controllers
                 return RedirectToAction("Details", "Movies", new { id = localMovie.Id, local = true });
             }
             //Step 1: Get the raw data from the API
-            var movieDetail = await _tmdbMovieService.MovieDetailAsync(id);
+            var movieDetail = await _movieService.MovieDetailAsync(id);
 
             //Step 2: Run the data through a mapping procedure
             var movie = await _tmdbMappingService.MapMovieDetailAsync(movieDetail);
@@ -196,6 +196,35 @@ namespace MovieProDemo.Controllers
         private bool MovieExists(int id)
         {
             return _context.Movie.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> Details(int? id, bool local = false)
+        {
+            if (id == null)
+            {
+                return NotFound(); 
+            }
+
+            Movie movie = new();
+            if (local)
+            {
+                //Get the Movie data straight from the DB
+                movie = await _context.Movie.Include(m => m.Cast)
+                    .Include(m => m.Crew)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+            }
+            else
+            {
+                //Get the movie data from the TMDB API
+                var movieDetail = await _movieService.MovieDetailAsync((int)id);
+                movie = await _tmdbMappingService.MapMovieDetailAsync(movieDetail);
+            }
+            if (movie == null)
+            {
+                return NotFound(); 
+            }
+            ViewData["Local"] = local;
+            return View(movie); 
         }
 
         private async Task AddToMovieCollection(int movieId, string collectionName)
