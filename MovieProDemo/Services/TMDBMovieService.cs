@@ -31,7 +31,7 @@ namespace MovieProDemo.Services
         public async Task<ActorDetail> ActorDetailAsync(int id)
         {
             //Step 1: Setup a default return object
-            ActorDetail actorDetail = new();
+            ActorDetail actorDetail = new ActorDetail();
 
             //Step 2: Assemble the full request uri string
             var query = $"{_appSettings.TMDBSettings.BaseUrl}/person/{id}";
@@ -62,7 +62,7 @@ namespace MovieProDemo.Services
         public async Task<MovieDetail> MovieDetailAsync(int id)
         {
             //Step 1: SetUp default return object
-            MovieDetail movieDetail = new();
+            MovieDetail movieDetail = new MovieDetail();
 
             //Step 2: Assemble the request
             var query = $"{_appSettings.TMDBSettings.BaseUrl}/movie/{id}";
@@ -92,7 +92,7 @@ namespace MovieProDemo.Services
         public async Task<MovieSearch> SearchMovieDetailAsync(MovieCategory category, int count)
         {
             //Step 1: Setup a default instance of MovieSearch
-            MovieSearch moviesearch = new();
+            MovieSearch moviesearch = new MovieSearch();
 
             //Step 2: Assemble the full request uri string
             var query = $"{_appSettings.TMDBSettings.BaseUrl}/movie{category}";
